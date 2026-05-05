@@ -21,7 +21,7 @@ import time
 import os
 from io import BytesIO
 from datetime import datetime
-from flask import Flask, request as freq, jsonify
+from flask import Flask, request as freq, jsonify, send_file
 from flask_cors import CORS
 
 # ============================================================
@@ -52,8 +52,11 @@ DB_PATH         = "eleganto_business.db"
 # ⚠️ Quyidagi ikkitasini Cloudflare Tunnel URL bilan almashtiring:
 # cloudflared tunnel --url http://localhost:8080
 # buyruqni ishga tushirgandan keyin beriladigan URL ni qo'ying.
+# ⬇️ cloudflared tunnel --url http://localhost:8080  buyrug'ini ishga tushirib,
+#    berilgan URL ni bu yerga qo'ying. Masalan:
+#    SERVER_URL = "https://abc-xyz.trycloudflare.com"
 SERVER_URL   = "https://YOUR_CLOUDFLARE_URL_HERE"   # ← O'zgartiring!
-MINI_APP_URL = "https://aikmediauz.github.io/eleganto-app/"
+MINI_APP_URL = SERVER_URL + "/"                      # Flask index.html ni avtomatik beradi
 
 # Default kategoriyalar va subkategoriyalar
 CATEGORIES = {
@@ -1393,6 +1396,12 @@ def api_wishlist():
     conn.commit()
     conn.close()
     return jsonify({'success': True})
+
+
+@app.route('/')
+def serve_index():
+    idx = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'index.html')
+    return send_file(idx)
 
 
 @app.route('/health')

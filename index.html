@@ -1057,7 +1057,11 @@ header {
 // ============================================================
 // CONFIG — Cloudflare Tunnel URL ni qo'ying:
 // ============================================================
-const API_BASE = 'https://YOUR_CLOUDFLARE_URL_HERE';  // ← O'zgartiring!
+// Agar GitHub Pages dan ochilsa → Cloudflare Tunnel URL kerak.
+// Agar Flask serverdan ochilsa → bo'sh string (relative URL) ishlaydi.
+const API_BASE = window.location.hostname.includes('github.io')
+  ? 'https://YOUR_CLOUDFLARE_URL_HERE'   // ← Cloudflare Tunnel URLini shu yerga qo'ying
+  : '';                                   // Flask serverdan ochilsa, o'zgartirish shart emas
 
 // ============================================================
 // TELEGRAM WEBAP INIT
