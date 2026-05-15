@@ -364,7 +364,7 @@ svg.ico-sm{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;s
     <div class="onb-step" id="os4">
       <div class="onb-icon-big">💬</div>
       <div class="onb-title">Menejer bilan bog'laning</div>
-      <div class="onb-desc">Savol yoki muammo bo'lsa, pastki menyudan bizga murojaat qiling.</div>
+      <div class="onb-desc">Savol yoki muammo bo'lsa, chap menyudan "Menejer bilan bog'lanish" ni tanlang.</div>
     </div>
     <div class="onb-dots">
       <div class="onb-dot active" id="od0"></div><div class="onb-dot" id="od1"></div>
@@ -408,6 +408,8 @@ svg.ico-sm{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;s
     <li><a href="#" onclick="filterCat('soatlar');closeSb();return false">⌚ Soatlar</a></li>
     <li><a href="#" onclick="filterCat('parfyum');closeSb();return false">🌸 Parfyumeriya</a></li>
     <li><a href="#" onclick="filterCat('aksessuarlar');closeSb();return false">💍 Aksessuarlar</a></li>
+    <li class="sb-section">YORDAM</li>
+    <li><a href="#" onclick="showContact();closeSb();return false">💬 Menejer bilan bog'lanish</a></li>
   </ul>
   <div class="sb-foot">© 2026 Eleganto</div>
 </nav>
@@ -529,6 +531,20 @@ svg.ico-sm{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;s
     <span class="nav-lbl">Savat</span>
   </button>
 </nav>
+
+<div class="modal hidden" id="adm-modal">
+  <div class="modal-box">
+    <h3>🔐 Admin Panel</h3>
+    <p>Kirish uchun parolni kiriting</p>
+    <input type="password" id="adm-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    <div class="modal-btns">
+      <button class="mbtn-p" onclick="doLogin()">Kirish</button>
+      <button class="mbtn-s" onclick="closeAdmModal()">Bekor</button>
+    </div>
+    <div class="modal-err hidden" id="adm-err">❌ Noto'g'ri parol!</div>
+  </div>
+</div>
+
 <div id="admin-panel" class="hidden">
   <div class="adm-hdr">
     <button class="adm-back" onclick="closeAdmin()">← Chiqish</button>
@@ -545,18 +561,19 @@ svg.ico-sm{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;s
   </div>
   <div class="adm-body" id="adm-body"></div>
 </div>
-<div class="modal hidden" id="adm-modal">
+
+<div class="modal hidden" id="contact-modal">
   <div class="modal-box">
-    <h3>🔐 Admin Panel</h3>
-    <p>Kirish uchun parolni kiriting</p>
-    <input type="password" id="adm-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
-    <div class="modal-btns">
-      <button class="mbtn-p" onclick="doLogin()">Kirish</button>
-      <button class="mbtn-s" onclick="closeAdmModal()">Bekor</button>
+    <h3>💬 Biz bilan bog'lanish</h3>
+    <p>Savollaringiz yoki takliflaringiz bormi? Menejerimiz sizga yordam berishga doim tayyor.</p>
+    <div style="display:flex; flex-direction:column; gap:10px; margin-top:14px;">
+      <button class="mbtn-p" onclick="window.open('https://t.me/eleganto_manager', '_blank')" style="width:100%; font-size:14px;">📲 Telegram orqali yozish</button>
+      <button class="mbtn-s" onclick="window.location.href='tel:+998946164060'" style="width:100%; font-size:14px;">📞 Qo'ng'iroq qilish</button>
+      <button class="mbtn-s" onclick="closeContact()" style="width:100%; border:none; background:none; color:var(--c-text2); margin-top:4px;">Yopish</button>
     </div>
-    <div class="modal-err hidden" id="adm-err">❌ Noto'g'ri parol!</div>
   </div>
 </div>
+
 <div id="lightbox" class="hidden">
   <button class="lb-close" onclick="closeLb()">✕</button>
   <button class="lb-nav lb-prev" onclick="lbNav(-1)" id="lb-prev">‹</button>
@@ -612,6 +629,10 @@ function applyTheme(){
 function toggleTheme(){S.dark=!S.dark;localStorage.setItem('el_theme',S.dark?'dark':'light');applyTheme();}
 function openSb(){document.getElementById('sidebar').classList.add('open');document.getElementById('sb-overlay').classList.remove('hidden');}
 function closeSb(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sb-overlay').classList.add('hidden');}
+
+// Contact Modal Logic
+function showContact() { document.getElementById('contact-modal').classList.remove('hidden'); }
+function closeContact() { document.getElementById('contact-modal').classList.add('hidden'); }
 
 function nav(v){
   document.querySelectorAll('.view').forEach(e => e.classList.remove('active'));
