@@ -884,13 +884,33 @@ function closeOnb() {
   localStorage.setItem('el_onboarded', '1');
 }
 
-// CHECKOUT
+// CHECKOUT (YANGILANGAN)
 function checkout() {
   if (S.cart.length === 0) return;
-  if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.sendData) {
-    window.Telegram.WebApp.sendData(JSON.stringify({ action: 'checkout', cart: S.cart }));
-    toast("Buyurtma yuborilmoqda...");
-    S.cart = []; sCart(); renderCart();
+  
+  let orderText = "Tasdiqlaysizmi?\n\n";
+  let tot = 0;
+  S.cart.forEach(c => {
+    let p = P.find(x => x.id === c.id);
+    if(p) {
+      orderText += `- ${p.name} (${c.q} ta)\n`;
+      tot += p.price * c.q;
+    }
+  });
+  orderText += `\nJami summa: ${fmt(tot)}`;
+
+  if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.showConfirm) {
+    window.Telegram.WebApp.showConfirm(orderText, function(ok) {
+      if(ok) {
+        try {
+          window.Telegram.WebApp.sendData(JSON.stringify({ action: 'checkout', cart: S.cart }));
+        } catch(e) {
+          console.log("sendData xatosi", e);
+        }
+        S.cart = []; sCart(); renderCart(); 
+        window.Telegram.WebApp.close();
+      }
+    });
   } else {
     toast("Buyurtma qabul qilindi (Test)");
     S.cart = []; sCart(); renderCart(); nav('home');
